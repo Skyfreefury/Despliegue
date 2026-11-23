@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tueste Lento · Tostadores de café en Valencia</title>
+<meta name="description" content="Café de especialidad tostado cada martes en el barrio de Russafa, Valencia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papel:#f4ede1; --kraft:#e6d6bb; --tinta:#2a1d15; --tinta-suave:#5c4a3d;
+    --brasa:#b4441c; --verde:#3f5a3a; --linea:#cdbb9c;
+    --serif:"DM Serif Display", Georgia, serif;
+    --sans:"Work Sans", system-ui, sans-serif;
+    --mono:"IBM Plex Mono", ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--papel);color:var(--tinta);line-height:1.55;font-size:16px}
+  a{color:inherit}
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  /* Aviso superior */
+  .aviso{background:var(--tinta);color:var(--papel);font-family:var(--mono);font-size:12.5px;text-align:center;padding:8px 12px;letter-spacing:.02em}
+
+  /* Cabecera */
+  header{position:sticky;top:0;z-index:20;background:var(--papel);border-bottom:1px solid var(--linea)}
+  .cab{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+  .marca{font-family:var(--serif);font-size:26px;text-decoration:none;letter-spacing:-.01em}
+  .marca em{color:var(--brasa)}
+  nav.menu{display:none;gap:28px;font-size:14.5px}
+  nav.menu a{text-decoration:none;border-bottom:1px solid transparent}
+  nav.menu a:hover{border-color:var(--tinta)}
+  .btn-cesta{display:flex;align-items:center;gap:8px;border:1.5px solid var(--tinta);background:none;padding:7px 14px;border-radius:999px;font-weight:500;font-size:14px}
+  .btn-cesta .num{background:var(--brasa);color:#fff;border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:12px;font-family:var(--mono)}
+  @media(min-width:760px){nav.menu{display:flex}}
+
+  /* Portada */
+  .portada{display:grid;gap:40px;padding-top:56px;padding-bottom:64px;border-bottom:1px solid var(--linea)}
+  .etiq{font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--tinta-suave)}
+  .portada h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.02em;margin:14px 0 20px}
+  .portada h1 em{color:var(--brasa)}
+  .portada p.intro{max-width:46ch;font-size:17.5px;color:var(--tinta-suave)}
+  .acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .btn{display:inline-block;padding:13px 22px;border-radius:4px;font-weight:600;text-decoration:none;border:1.5px solid var(--tinta);font-size:15px}
+  .btn.lleno{background:var(--tinta);color:var(--papel)}
+  .btn.lleno:hover{background:var(--brasa);border-color:var(--brasa)}
+  .btn:not(.lleno):hover{background:var(--kraft)}
+
+  .lote{background:var(--kraft);border:1px solid var(--linea);padding:26px;position:relative;align-self:start;transform:rotate(1.2deg);box-shadow:6px 6px 0 var(--tinta)}
+  .lote .sello{position:absolute;top:-14px;right:18px;background:var(--brasa);color:#fff;font-family:var(--mono);font-size:11.5px;padding:5px 10px;letter-spacing:.08em;text-transform:uppercase}
+  .lote h2{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.1;margin:8px 0 12px}
+  .lote dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14.5px;margin:16px 0}
+  .lote dt{font-family:var(--mono);font-size:12px;text-transform:uppercase;color:var(--tinta-suave);padding-top:2px}
+  .fecha-tueste{font-family:var(--mono);font-size:13px;border-top:1px dashed var(--tinta-suave);padding-top:12px;margin-top:6px}
+  @media(min-width:860px){.portada{grid-template-columns:1.35fr 1fr;align-items:center}}
+
+  /* Catálogo */
+  section{padding:64px 0}
+  .tit-sec{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:28px}
+  .tit-sec h2{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.5vw,46px);line-height:1.05}
+  .filtros{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--tinta);background:transparent;padding:6px 14px;border-radius:999px;font-size:13.5px}
+  .chip[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
+  .rejilla{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .producto{background:#fbf7ef;border:1px solid var(--linea);display:flex;flex-direction:column}
+  .banda{height:10px}
+  .prod-cuerpo{padding:20px 20px 0;flex:1}
+  .origen{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--tinta-suave)}
+  .producto h3{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;margin:6px 0 10px}
+  .notas{font-size:14.5px;color:var(--tinta-suave);margin-bottom:14px}
+  .tueste{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--tinta-suave);margin-bottom:16px}
+  .puntos{display:flex;gap:4px}
+  .puntos i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--tinta)}
+  .puntos i.on{background:var(--tinta)}
+  .prod-pie{padding:16px 20px 20px;border-top:1px dashed var(--linea);display:grid;gap:12px}
+  .fila{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .precio{font-family:var(--serif);font-size:24px}
+  .precio small{font-family:var(--mono);font-size:12px;color:var(--tinta-suave)}
+  select{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--linea);background:var(--papel);border-radius:4px;width:100%}
+  .anadir{background:var(--tinta);color:var(--papel);border:none;padding:11px;border-radius:4px;font-weight:600;font-size:14.5px;transition:background .15s}
+  .anadir:hover{background:var(--brasa)}
+  .anadir.ok{background:var(--verde)}
+  .vacio-filtro{display:none;padding:40px;text-align:center;border:1px dashed var(--linea);color:var(--tinta-suave)}
+
+  /* Proceso */
+  .proceso{background:var(--tinta);color:var(--papel)}
+  .proceso .etiq{color:#c9b8a3}
+  .pasos{display:grid;gap:2px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:32px;background:#4a3a2e}
+  .paso{background:var(--tinta);padding:26px 22px}
+  .paso .n{font-family:var(--mono);color:#e2804f;font-size:13px}
+  .paso h3{font-family:var(--serif);font-weight:400;font-size:24px;margin:10px 0 8px}
+  .paso p{font-size:14.5px;color:#d8c9b6}
+
+  /* Visita */
+  .visita{display:grid;gap:32px}
+  .visita .bloque{border-top:2px solid var(--tinta);padding-top:16px}
+  .visita h3{font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
+  .horario{width:100%;border-collapse:collapse;font-size:15px}
+  .horario td{padding:6px 0;border-bottom:1px dotted var(--linea)}
+  .horario td:last-child{text-align:right;font-family:var(--mono);font-size:13.5px}
+  .horario tr.hoy td{font-weight:600;color:var(--brasa)}
+  @media(min-width:760px){.visita{grid-template-columns:repeat(3,1fr)}}
+
+  footer{border-top:1px solid var(--linea);padding:28px 0;font-size:13.5px;color:var(--tinta-suave)}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+  /* Cesta lateral */
+  .velo{position:fixed;inset:0;background:rgba(42,29,21,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+  .cesta{position:fixed;top:0;right:0;height:100%;width:min(420px,100%);background:var(--papel);z-index:50;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;border-left:1px solid var(--linea)}
+  body.abierta .velo{opacity:1;pointer-events:auto}
+  body.abierta .cesta{transform:none}
+  .cesta-cab{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--linea)}
+  .cesta-cab h2{font-family:var(--serif);font-weight:400;font-size:28px}
+  .cerrar{background:none;border:none;font-size:26px;line-height:1;padding:4px 8px}
+  .envio{padding:14px 22px;font-size:13.5px;border-bottom:1px solid var(--linea)}
+  .barra{height:6px;background:var(--kraft);margin-top:8px;border-radius:3px;overflow:hidden}
+  .barra span{display:block;height:100%;background:var(--verde);transition:width .3s}
+  .lineas{flex:1;overflow:auto;padding:8px 22px}
+  .linea{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:14px 0;border-bottom:1px dashed var(--linea)}
+  .linea b{font-weight:600}
+  .linea .det{font-size:13px;color:var(--tinta-suave);font-family:var(--mono)}
+  .cant{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .cant button{width:28px;height:28px;border:1px solid var(--tinta);background:none;border-radius:4px}
+  .cesta-vacia{text-align:center;padding:48px 10px;color:var(--tinta-suave)}
+  .cesta-vacia p:first-child{font-family:var(--serif);font-size:24px;color:var(--tinta);margin-bottom:6px}
+  .cesta-pie{padding:18px 22px;border-top:1px solid var(--linea);display:grid;gap:12px}
+  .total{display:flex;justify-content:space-between;font-family:var(--serif);font-size:24px}
+  .pedir{background:var(--brasa);color:#fff;border:none;padding:14px;border-radius:4px;font-weight:600}
+  .pedir:disabled{opacity:.4;cursor:not-allowed}
+  .confirm{display:none;background:#e3ead9;border:1px solid var(--verde);padding:12px;font-size:14px}
+
+  :focus-visible{outline:2px solid var(--brasa);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="aviso">Tostamos los martes · Envío gratis desde 35 € en península · Recogida en tienda sin coste</div>
+
+<header>
+  <div class="wrap cab">
+    <a href="#" class="marca">Tueste <em>Lento</em></a>
+    <nav class="menu" aria-label="Principal">
+      <a href="#cafes">Cafés</a>
+      <a href="#como">Cómo tostamos</a>
+      <a href="#visita">Visítanos</a>
+    </nav>
+    <button class="btn-cesta" id="abrirCesta" aria-label="Abrir cesta">Cesta <span class="num" id="numCesta">0</span></button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap portada">
+    <div>
+      <span class="etiq">Russafa, Valencia · desde 2017</span>
+      <h1>Café tostado en pequeñas tandas, <em>a 200 metros</em> de tu taza.</h1>
+      <p class="intro">Compramos a seis fincas que conocemos por su nombre, tostamos 12 kilos cada vez en una Giesen de 2009 y lo enviamos el mismo miércoles.</p>
+      <div class="acciones">
+        <a href="#cafes" class="btn lleno">Ver los cafés</a>
+        <a href="#visita" class="btn">Pasar por la tienda</a>
+      </div>
+    </div>
+    <aside class="lote" aria-label="Lote de la semana">
+      <span class="sello">Lote de la semana</span>
+      <span class="etiq">Lote nº 214</span>
+      <h2>Huila, finca El Mirador</h2>
+      <p>Lavado, variedad Caturra. Panela, mandarina y un final de cacao que dura.</p>
+      <dl>
+        <dt>Altura</dt><dd>1.750 m</dd>
+        <dt>Productor</dt><dd>Familia Quintero</dd>
+        <dt>Quedan</dt><dd id="quedan">38 bolsas</dd>
+      </dl>
+      <p class="fecha-tueste" id="fechaTueste">Tostado el martes</p>
+    </aside>
+  </div>
+
+  <section id="cafes">
+    <div class="wrap">
+      <div class="tit-sec">
+        <div>
+          <span class="etiq">Catálogo · bolsas de 250 g</span>
+          <h2>Lo que hay en el tostador</h2>
+        </div>
+        <div class="filtros" role="group" aria-label="Filtrar por uso">
+          <button class="chip" data-f="todos" aria-pressed="true">Todos</button>
+          <button class="chip" data-f="espresso" aria-pressed="false">Espresso</button>
+          <button class="chip" data-f="filtro" aria-pressed="false">Filtro</button>
+          <button class="chip" data-f="descaf" aria-pressed="false">Descafeinado</button>
+        </div>
+      </div>
+      <div class="rejilla" id="rejilla"></div>
+      <p class="vacio-filtro" id="vacioFiltro">No hay cafés con ese filtro esta semana.</p>
+    </div>
+  </section>
+
+  <section id="como" class="proceso">
+    <div class="wrap">
+      <span class="etiq">El proceso</span>
+      <div class="tit-sec"><h2>Tres días entre el saco y tu buzón</h2></div>
+      <div class="pasos">
+        <div class="paso"><span class="n">01 · lunes</span><h3>Catamos</h3><p>Probamos cada lote verde con tres perfiles de tueste y elegimos uno. Si no convence, no sale.</p></div>
+        <div class="paso"><span class="n">02 · martes</span><h3>Tostamos</h3><p>Tandas de 12 kg, entre 9 y 12 minutos. Apuntamos cada curva en una libreta que ya va por el tomo cuatro.</p></div>
+        <div class="paso"><span class="n">03 · miércoles</span><h3>Enviamos</h3><p>Reposo de 24 horas, molido si lo pides y a correos antes de las 13:00. Bolsa con válvula, sin plástico de más.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="visita">
+    <div class="wrap">
+      <div class="tit-sec"><div><span class="etiq">La tienda</span><h2>Pásate a oler el martes</h2></div></div>
+      <div class="visita">
+        <div class="bloque">
+          <h3>Dirección</h3>
+          <p>Carrer de Sueca, 41<br>46006 Valencia</p>
+          <p style="margin-top:10px;color:var(--tinta-suave);font-size:14.5px">Metro Bailén o Xàtiva, 6 minutos andando.</p>
+        </div>
+        <div class="bloque">
+          <h3>Horario</h3>
+          <table class="horario" id="horario">
+            <tr data-d="1"><td>Lunes</td><td>Cerrado</td></tr>
+            <tr data-d="2"><td>Martes a viernes</td><td>9:00 – 14:00 · 17:00 – 20:00</td></tr>
+            <tr data-d="6"><td>Sábado</td><td>10:00 – 14:00</td></tr>
+            <tr data-d="0"><td>Domingo</td><td>Cerrado</td></tr>
+          </table>
+        </div>
+        <div class="bloque">
+          <h3>Contacto</h3>
+          <p>hola@tuestelento.es<br>963 00 00 00</p>
+          <p style="margin-top:10px;color:var(--tinta-suave);font-size:14.5px">Molemos gratis el café que compres, para cualquier cafetera.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Tueste Lento S.L. · Proyecto de clase, tienda ficticia</span>
+    <span>Hecho en Russafa</span>
+  </div>
+</footer>
+
+<div class="velo" id="velo"></div>
+<aside class="cesta" id="cesta" aria-label="Cesta" aria-hidden="true">
+  <div class="cesta-cab">
+    <h2>Tu cesta</h2>
+    <button class="cerrar" id="cerrarCesta" aria-label="Cerrar cesta">×</button>
+  </div>
+  <div class="envio" id="envio"></div>
+  <div class="lineas" id="lineas"></div>
+  <div class="cesta-pie">
+    <div class="total"><span>Total</span><span id="total">0,00 €</span></div>
+    <button class="pedir" id="pedir" disabled>Hacer pedido</button>
+    <div class="confirm" id="confirm" role="status"></div>
+  </div>
+</aside>
+
+<script>
+const cafes = [
+  {id:"huila", nombre:"Huila El Mirador", origen:"Colombia", notas:"Panela, mandarina, cacao.", tueste:2, precio:12.5, tipo:["filtro","espresso"], color:"#b4441c"},
+  {id:"sidama", nombre:"Sidama Bensa", origen:"Etiopía", notas:"Jazmín, melocotón, té negro.", tueste:1, precio:14, tipo:["filtro"], color:"#c98b2b"},
+  {id:"cerrado", nombre:"Cerrado Mineiro", origen:"Brasil", notas:"Avellana, chocolate con leche, cuerpo redondo.", tueste:4, precio:10.5, tipo:["espresso"], color:"#3f5a3a"},
+  {id:"santa", nombre:"Santa Bárbara", origen:"Honduras", notas:"Manzana asada, caramelo, acidez suave.", tueste:3, precio:11.5, tipo:["espresso","filtro"], color:"#6b4b8a"},
+  {id:"nyeri", nombre:"Nyeri Gatomboya", origen:"Kenia", notas:"Grosella negra, pomelo, muy jugoso.", tueste:1, precio:15.5, tipo:["filtro"], color:"#8a2c3b"},
+  {id:"descaf", nombre:"Descafeinado Caña", origen:"Colombia", notas:"Melaza, nuez, sin la cafeína.", tueste:3, precio:12, tipo:["descaf","espresso","filtro"], color:"#5c4a3d"},
+];
+const moliendas = ["En grano","Espresso","Moka italiana","V60 / goteo","Prensa francesa"];
+const ENVIO_GRATIS = 35;
+const eur = n => n.toLocaleString("es-ES",{style:"currency",currency:"EUR"});
+
+// Catálogo
+const rejilla = document.getElementById("rejilla");
+rejilla.innerHTML = cafes.map(c => `
+  <article class="producto" data-tipo="${c.tipo.join(" ")}">
+    <div class="banda" style="background:${c.color}"></div>
+    <div class="prod-cuerpo">
+      <span class="origen">${c.origen}</span>
+      <h3>${c.nombre}</h3>
+      <p class="notas">${c.notas}</p>
+      <div class="tueste">Tueste
+        <span class="puntos" aria-label="Tueste ${c.tueste} de 5">${[1,2,3,4,5].map(i=>`<i class="${i<=c.tueste?"on":""}"></i>`).join("")}</span>
+        ${c.tueste<=2?"claro":c.tueste===3?"medio":"oscuro"}
+      </div>
+    </div>
+    <div class="prod-pie">
+      <div class="fila"><span class="precio">${eur(c.precio)} <small>/ 250 g</small></span></div>
+      <label class="sr" style="font-size:13px;color:var(--tinta-suave)">Molienda
+        <select data-mol="${c.id}">${moliendas.map(m=>`<option>${m}</option>`).join("")}</select>
+      </label>
+      <button class="anadir" data-id="${c.id}">Añadir a la cesta</button>
+    </div>
+  </article>`).join("");
+
+// Filtros
+document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => {
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed","false"));
+  ch.setAttribute("aria-pressed","true");
+  const f = ch.dataset.f; let visibles = 0;
+  document.querySelectorAll(".producto").forEach(p => {
+    const ok = f==="todos" || p.dataset.tipo.split(" ").includes(f);
+    p.style.display = ok ? "" : "none"; if(ok) visibles++;
+  });
+  document.getElementById("vacioFiltro").style.display = visibles ? "none" : "block";
+}));
+
+// Cesta (se guarda en el navegador si se puede)
+let cesta = [];
+try { cesta = JSON.parse(localStorage.getItem("tl-cesta")) || []; } catch(e) {}
+const guardar = () => { try { localStorage.setItem("tl-cesta", JSON.stringify(cesta)); } catch(e) {} };
+
+function pintarCesta(){
+  const unidades = cesta.reduce((s,l)=>s+l.cant,0);
+  const total = cesta.reduce((s,l)=>s+l.cant*cafes.find(c=>c.id===l.id).precio,0);
+  document.getElementById("numCesta").textContent = unidades;
+  document.getElementById("total").textContent = eur(total);
+  document.getElementById("pedir").disabled = unidades===0;
+  const falta = ENVIO_GRATIS - total;
+  document.getElementById("envio").innerHTML = (falta>0
+    ? `Te faltan <b>${eur(falta)}</b> para el envío gratis.`
+    : `<b>Envío gratis</b> incluido.`) + `<div class="barra"><span style="width:${Math.min(100,total/ENVIO_GRATIS*100)}%"></span></div>`;
+  const lineas = document.getElementById("lineas");
+  if(!cesta.length){
+    lineas.innerHTML = `<div class="cesta-vacia"><p>La cesta está vacía</p><p>Elige un café del catálogo y aparecerá aquí.</p></div>`;
+    return;
+  }
+  lineas.innerHTML = cesta.map((l,i)=>{
+    const c = cafes.find(x=>x.id===l.id);
+    return `<div class="linea">
+      <div><b>${c.nombre}</b><div class="det">${l.mol} · ${eur(c.precio)}</div>
+        <div class="cant"><button data-i="${i}" data-d="-1" aria-label="Quitar uno">−</button><span>${l.cant}</span><button data-i="${i}" data-d="1" aria-label="Añadir uno">+</button></div>
+      </div>
+      <div>${eur(c.precio*l.cant)}</div>
+    </div>`;
+  }).join("");
+}
+
+rejilla.addEventListener("click", e => {
+  const b = e.target.closest(".anadir"); if(!b) return;
+  const id = b.dataset.id, mol = document.querySelector(`[data-mol="${id}"]`).value;
+  const l = cesta.find(x=>x.id===id && x.mol===mol);
+  l ? l.cant++ : cesta.push({id,mol,cant:1});
+  guardar(); pintarCesta();
+  b.textContent = "Añadido ✓"; b.classList.add("ok");
+  setTimeout(()=>{ b.textContent="Añadir a la cesta"; b.classList.remove("ok"); }, 1200);
+});
+document.getElementById("lineas").addEventListener("click", e => {
+  const b = e.target.closest("button[data-i]"); if(!b) return;
+  const l = cesta[b.dataset.i]; l.cant += Number(b.dataset.d);
+  if(l.cant<=0) cesta.splice(b.dataset.i,1);
+  guardar(); pintarCesta();
+});
+
+const abrir = () => { document.body.classList.add("abierta"); document.getElementById("cesta").setAttribute("aria-hidden","false"); document.getElementById("confirm").style.display="none"; };
+const cerrar = () => { document.body.classList.remove("abierta"); document.getElementById("cesta").setAttribute("aria-hidden","true"); };
+document.getElementById("abrirCesta").onclick = abrir;
+document.getElementById("cerrarCesta").onclick = cerrar;
+document.getElementById("velo").onclick = cerrar;
+document.addEventListener("keydown", e => { if(e.key==="Escape") cerrar(); });
+
+document.getElementById("pedir").onclick = () => {
+  const n = Math.floor(1000+Math.random()*9000);
+  const c = document.getElementById("confirm");
+  c.innerHTML = `Pedido <b>TL-${n}</b> registrado. Sale el próximo miércoles. <br><small>(Tienda de prueba: no se cobra nada.)</small>`;
+  c.style.display = "block";
+  cesta = []; guardar(); pintarCesta();
+};
+
+// Fecha del último martes y día de hoy en el horario
+const hoy = new Date();
+const martes = new Date(hoy); martes.setDate(hoy.getDate() - ((hoy.getDay()+5)%7));
+document.getElementById("fechaTueste").textContent = "Tostado el " + martes.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+const d = hoy.getDay();
+const fila = d===1?"1": d===0?"0": d===6?"6":"2";
+document.querySelector(`#horario tr[data-d="${fila}"]`).classList.add("hoy");
+
+pintarCesta();
+</script>
+</body>
+</html>
